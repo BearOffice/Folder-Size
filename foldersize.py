@@ -3,7 +3,7 @@ import re
 import unicodedata
 
 
-def get_list(path):
+def get_dirlist(path):
     dirlist = scan_dir(path)
     return dirlist[::-1]
 
