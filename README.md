@@ -2,11 +2,6 @@
  A small script that can analyze the folder size quickly.
  Help to find out the big files&folders to save disk storage.  
 
-# MusicBot
-A small script that can analyze the folder size quickly.  
-Help to find out the big files&folders to save disk storage. 
-
-
 # Help
  Enter help(h) to get help message  
  Enter scan(s) [path] to scan all folders and files below the path specified  
