@@ -6,6 +6,7 @@ import foldersize
 
 # windows runtime
 
+
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -46,10 +47,12 @@ Enter exit(e) to exit'''
 if is_admin():
     pass
 else:
-    print('Permission is needed to access the system files\n' + 'Would you like to request the permission(y/n)?')
+    print('Permission is needed to access the system files\n' +
+          'Would you like to request the permission(y/n)?')
     inputsrc = input()
     if inputsrc == 'y':
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+        ctypes.windll.shell32.ShellExecuteW(
+            None, "runas", sys.executable, __file__, None, 1)
         sys.exit()
     else:
         pass
@@ -80,7 +83,7 @@ while True:
             dirlist = foldersize.scan_dir(cont)
             print('Scan completed...')
         elif cmd == 'treeview' or cmd == 't':
-            if dirlist == []:
+            if not dirlist:
                 raise Exception('Scan first')
 
             if cont == '-full' or cont == '-f':
@@ -92,33 +95,35 @@ while True:
 
             lastdisplayed = 't'
         elif cmd == 'dirlistview' or cmd == 'dl':
-            if dirlist == []:
+            if not dirlist:
                 raise Exception('Scan first')
 
             if cont == '-full' or cont == '-f':
                 dirlist_view = foldersize.get_dir_list(dirlist, full=True)
             elif cont != '':
-                dirlist_view = foldersize.get_dir_list(dirlist, number=int(cont))
+                dirlist_view = foldersize.get_dir_list(
+                    dirlist, number=int(cont))
             else:
                 dirlist_view = foldersize.get_dir_list(dirlist)
 
             foldersize.print_listview(dirlist_view)
             lastdisplayed = 'dl'
         elif cmd == 'filelistview' or cmd == 'fl':
-            if dirlist == []:
+            if not dirlist:
                 raise Exception('Scan first')
 
             if cont == '-full' or cont == '-f':
                 dirlist_view = foldersize.get_file_list(dirlist, full=True)
             elif cont != '':
-                dirlist_view = foldersize.get_file_list(dirlist, number=int(cont))
+                dirlist_view = foldersize.get_file_list(
+                    dirlist, number=int(cont))
             else:
                 dirlist_view = foldersize.get_file_list(dirlist)
 
             foldersize.print_listview(dirlist_view)
             lastdisplayed = 'fl'
         elif cmd == 'go' or cmd == 'g':
-            if dirlist == []:
+            if not dirlist:
                 raise Exception('Scan first')
 
             newdirlist = foldersize.movein_list(dirlist, int(cont))
@@ -127,16 +132,16 @@ while True:
             foldersize.print_treeview(dirlist)
             lastdisplayed = 't'
         elif cmd == 'back' or cmd == 'b':
-            if dirlist == []:
+            if not dirlist:
                 raise Exception('Scan first')
-            if dirlist_history == []:
+            if not dirlist_history:
                 raise Exception('Already at the top of the folder')
 
             dirlist = dirlist_history.pop()
             foldersize.print_treeview(dirlist)
             lastdisplayed = 't'
         elif cmd == 'open' or cmd == 'o':
-            if dirlist == []:
+            if not dirlist:
                 raise Exception('Scan first')
 
             if lastdisplayed == 't':

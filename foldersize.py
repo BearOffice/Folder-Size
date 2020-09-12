@@ -22,8 +22,10 @@ def scan(path):
             dirname, basename = os.path.split(direntry.path)
             fullpath = direntry.path
             if temppath != dirname:
-                templist_sorted = sorted(templist, key=lambda x: x[1], reverse=True)
-                dirlist.append(((temppath, calc_size(temppath, isfile=False)), templist_sorted))
+                templist_sorted = sorted(
+                    templist, key=lambda x: x[1], reverse=True)
+                dirlist.append(
+                    ((temppath, calc_size(temppath, isfile=False)), templist_sorted))
                 temppath = dirname
 
             if direntry.is_file():
@@ -36,7 +38,8 @@ def scan(path):
         pass
 
     templist_sorted = sorted(templist, key=lambda x: x[1], reverse=True)
-    dirlist.append(((temppath, calc_size(temppath, isfile=False)), templist_sorted))
+    dirlist.append(
+        ((temppath, calc_size(temppath, isfile=False)), templist_sorted))
     # [((dir,size),[(file,size),(file,size)]),((dir,size),[(file,size)])]
     return dirlist
 
@@ -103,7 +106,6 @@ def get_file_list_elem(filelist, index):
 
 
 def calc_depth(path):
-    sep = ''
     if os.path.sep == '\\':
         sep = r'\\'
     else:
@@ -132,7 +134,7 @@ def movein_list(dirlist, index):
             isstarted = True
             newdirlist.append(ditem)
     # Check
-    if newdirlist == []:
+    if not newdirlist:
         raise Exception('Index overflowed')
     else:
         return newdirlist
@@ -168,11 +170,11 @@ def bytes_convert(size):
     mb = 1024 ** 2
     gb = 1024 ** 3
     if size < mb:
-        return f'{size/kb:>5.2f} KB'
+        return f'{size / kb:>5.2f} KB'
     elif mb <= size < gb:
-        return f'{size/mb:>5.2f} MB'
+        return f'{size / mb:>5.2f} MB'
     elif gb <= size:
-        return f'{size/gb:>5.2f} GB'
+        return f'{size / gb:>5.2f} GB'
 
 
 def print_treeview(dirlist, collapse=True, level=5):
@@ -205,27 +207,32 @@ def print_treeview(dirlist, collapse=True, level=5):
                     collapsecnt += 1
                     continue
                 elif collapsecnt != 0:
-                    print(f'{dirind*level}{symbol} ...{collapsecnt} folders collapsed')
+                    print(
+                        f'{dirind * level}{symbol} ...{collapsecnt} folders collapsed')
                     collapsecnt = 0
 
-            print(f'{dirind*reldepth}{symbol} {dirname:<{44-len_diff(dirname)}}{dirsize:>12}')
+            print(
+                f'{dirind * reldepth}{symbol} {dirname:<{44 - len_diff(dirname)}}{dirsize:>12}')
         else:  # print rootdir
             dirname = f'[{len_adjust(dirpath)}]'
-            print(f'{dirname:<{48-len_diff(dirname)}}{dirsize:>12}')
+            print(f'{dirname:<{48 - len_diff(dirname)}}{dirsize:>12}')
 
         for j, fitem in enumerate(ditem[1]):
             if collapse and i != 0:
                 if reldepth >= 3:
-                    print(f'{fileind*(reldepth+1)}{symbol} ...{len(ditem[1])} files collapsed')
+                    print(
+                        f'{fileind * (reldepth + 1)}{symbol} ...{len(ditem[1])} files collapsed')
                     break
                 elif j > 2:
-                    print(f'{fileind*(reldepth+1)}{symbol} ...{len(ditem[1])-3} files collapsed')
+                    print(
+                        f'{fileind * (reldepth + 1)}{symbol} ...{len(ditem[1]) - 3} files collapsed')
                     break
 
             filename = len_adjust(fitem[0])
             filesize = bytes_convert(fitem[1])
 
-            print(f'{fileind*(reldepth+1)}{symbol} {filename:<{40-len_diff(filename)}}{filesize:>12}')
+            print(
+                f'{fileind * (reldepth + 1)}{symbol} {filename:<{40 - len_diff(filename)}}{filesize:>12}')
 
 
 def get_dir_tree_elem(dirlist, index):
