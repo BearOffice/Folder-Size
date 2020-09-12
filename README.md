@@ -6,17 +6,17 @@
  Enter help(h) to get help message  
  Enter scan(s) [path] to scan all folders and files below the path specified  
  Enter treeview(t) [optional=level / -full(f)] to print the scan's result  
- &emsp;&emsp;the folders below the level will be collapsed  
- &emsp;&emsp;default value is 5  level should be upper than 1  
- &emsp;&emsp;use option -full(f) to print the full scan's result  
+ &emsp;&emsp;&emsp;the folders below the level will be collapsed  
+ &emsp;&emsp;&emsp;default value is 5  level should be upper than 1  
+ &emsp;&emsp;&emsp;use option -full(f) to print the full scan's result  
  Enter dirlistview(dl) [optional=number / -full(f)] to print the folders' paths descending by size  
- &emsp;&emsp;number can be specified to decide the number of paths you want to display  
- &emsp;&emsp;default value is 10  
- &emsp;&emsp;use option -full(f) to print the full result  
+ &emsp;&emsp;&emsp;number can be specified to decide the number of paths you want to display  
+ &emsp;&emsp;&emsp;default value is 10  
+ &emsp;&emsp;&emsp;use option -full(f) to print the full result  
  Enter filelistview(fl) [optional=number / -full(f)] to print the files' paths descending by size  
- &emsp;&emsp;number can be specified to decide the number of paths you want to display  
- &emsp;&emsp;default value is 10  
- &emsp;&emsp;use option -full(f) to print the full result  
+ &emsp;&emsp;&emsp;number can be specified to decide the number of paths you want to display  
+ &emsp;&emsp;&emsp;default value is 10  
+ &emsp;&emsp;&emsp;use option -full(f) to print the full result  
  Enter go(g) [index] to move into the specified folders  
  Enter back(b) to move back the parent folders  
  Enter open(o) [index] to open the folder or the file specified  
