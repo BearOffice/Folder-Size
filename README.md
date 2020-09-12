@@ -23,5 +23,5 @@
  &emsp;&emsp;&emsp;index relates to the treeview  
  Enter back(b) to move back the parent folders  
  Enter open(o) [index] to open the folder or the file specified  
- &emsp;&emsp;&emsp;index relates to the last showed view
+ &emsp;&emsp;&emsp;index relates to the last showed view  
  Enter exit(e) to exit  
