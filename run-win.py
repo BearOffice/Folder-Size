@@ -21,24 +21,27 @@ def cmd_spl(cmd):
         return cmd, ''
 
 
-helpmsg = 'Enter help(h) to get help message\n' + \
-    'Enter scan(s) [path] to scan all folders and files below the path specified\n' + \
-    'Enter treeview(t) [optional=level / -full(f)] to print the scan\'s result\n' + \
-    '           the folders below the level will be collapsed\n' + \
-    '           default value is 5  level should be upper than 1\n' + \
-    '           use option -full(f) to print the full scan\'s result\n' + \
-    'Enter dirlistview(dl) [optional=number / -full(f)] to print the folders\' paths descending by size\n' + \
-    '           number can be specified to decide the number of paths you want to display\n' + \
-    '           default value is 10\n' + \
-    '           use option -full(f) to print the full result\n' + \
-    'Enter filelistview(fl) [optional=number / -full(f)] to print the files\' paths descending by size\n' + \
-    '           number can be specified to decide the number of paths you want to display\n' + \
-    '           default value is 10\n' + \
-    '           use option -full(f) to print the full result\n' + \
-    'Enter go(g) [index] to move into the specified folders\n' + \
-    'Enter back(b) to move back the parent folders\n' + \
-    'Enter open(o) [index] to open the folder or the file specified\n' + \
-    'Enter exit(e) to exit'
+helpmsg = '''
+Enter help(h) to get help message
+Enter scan(s) [path] to scan all folders and files below the path specified
+Enter treeview(t) [optional=level / -full(f)] to print the scan\'s result
+           the folders below the level will be collapsed
+           default value is 5  level should be upper than 1
+           use option -full(f) to print the full scan\'s result
+Enter dirlistview(dl) [optional=number / -full(f)] to print the folders\' paths descending by size
+           number can be specified to decide the number of paths you want to display
+           default value is 10
+           use option -full(f) to print the full result
+Enter filelistview(fl) [optional=number / -full(f)] to print the files\' paths descending by size
+           number can be specified to decide the number of paths you want to display
+           default value is 10
+           use option -full(f) to print the full result
+Enter go(g) [index] to move into the specified folders
+           index relates to the treeview
+Enter back(b) to move back the parent folders
+Enter open(o) [index] to open the folder or the file specified
+           index relates to the last showed view
+Enter exit(e) to exit'''
 
 if is_admin():
     pass
