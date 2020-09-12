@@ -4,7 +4,7 @@ import unicodedata
 
 
 def scan_dir(path):
-    dirlist = scan_dir(path)
+    dirlist = scan(path)
     return dirlist[::-1]
 
 
