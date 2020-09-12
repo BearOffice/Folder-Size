@@ -3,12 +3,12 @@ import re
 import unicodedata
 
 
-def get_dirlist(path):
+def scan_dir(path):
     dirlist = scan_dir(path)
     return dirlist[::-1]
 
 
-def scan_dir(path):
+def scan(path):
     # Check
     if not os.path.exists(path):
         raise Exception("The path doesn't exist")
@@ -29,7 +29,7 @@ def scan_dir(path):
             if direntry.is_file():
                 templist.append((basename, calc_size(fullpath)))
             elif direntry.is_dir():
-                sublist = scan_dir(fullpath)
+                sublist = scan(fullpath)
                 sublist += dirlist
                 dirlist = sublist
     except:
