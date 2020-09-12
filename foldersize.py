@@ -3,6 +3,11 @@ import re
 import unicodedata
 
 
+def get_list(path):
+    dirlist = scan_dir(path)
+    return dirlist[::-1]
+
+
 def scan_dir(path):
     # Check
     if not os.path.exists(path):
@@ -24,15 +29,16 @@ def scan_dir(path):
             if direntry.is_file():
                 templist.append((basename, calc_size(fullpath)))
             elif direntry.is_dir():
-                dirlist += scan_dir(fullpath)
+                sublist = scan_dir(fullpath)
+                sublist += dirlist
+                dirlist = sublist
     except:
         pass
 
     templist_sorted = sorted(templist, key=lambda x: x[1], reverse=True)
     dirlist.append(((temppath, calc_size(temppath, isfile=False)), templist_sorted))
-    dirlist_sorted = sorted(dirlist, key=lambda x: x[0][0])
     # [((dir,size),[(file,size),(file,size)]),((dir,size),[(file,size)])]
-    return dirlist_sorted
+    return dirlist
 
 
 def calc_size(path, isfile=True):
