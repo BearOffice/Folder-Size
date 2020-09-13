@@ -1,11 +1,10 @@
 import sys
 import ctypes
-import os
 import subprocess
-import foldersize
+import foldersize as fs
+
 
 # windows runtime
-
 
 def is_admin():
     try:
@@ -14,12 +13,12 @@ def is_admin():
         return False
 
 
-def cmd_spl(cmd):
+def cmd_spl(command):
     try:
-        cmd = cmd.partition(' ')
-        return cmd[0], cmd[2]
+        command = command.partition(' ')
+        return command[0], command[2]
     except:
-        return cmd, ''
+        return command, ''
 
 
 helpmsg = '''
@@ -60,10 +59,7 @@ else:
 print()
 print('Enter help(h) to get help message')
 
-dirlist = []
-dirlist_view = []
-dirlist_history = []
-lastdisplayed = ''
+foldersize = None
 
 while True:
     print()
@@ -77,85 +73,42 @@ while True:
             print(helpmsg)
         elif cmd == 'scan' or cmd == 's':
             print('Scan started...')
-            dirlist = []
-            dirlist_view = []
-            dirlist_history = []
-            dirlist = foldersize.scan_dir(cont)
+            foldersize = fs.FolderSize(cont)
+            foldersize.scan_dir()
             print('Scan completed...')
         elif cmd == 'treeview' or cmd == 't':
-            if not dirlist:
-                raise Exception('Scan first')
-
             if cont == '-full' or cont == '-f':
-                foldersize.print_treeview(dirlist, collapse=False)
+                foldersize.print_treeview(collapse=False)
             elif cont != '':
-                foldersize.print_treeview(dirlist, level=int(cont))
+                foldersize.print_treeview(level=int(cont))
             else:
-                foldersize.print_treeview(dirlist)
-
-            lastdisplayed = 't'
+                foldersize.print_treeview()
         elif cmd == 'dirlistview' or cmd == 'dl':
-            if not dirlist:
-                raise Exception('Scan first')
-
             if cont == '-full' or cont == '-f':
-                dirlist_view = foldersize.get_dir_list(dirlist, full=True)
+                foldersize.create_dir_list(full=True)
             elif cont != '':
-                dirlist_view = foldersize.get_dir_list(
-                    dirlist, number=int(cont))
+                foldersize.create_dir_list(number=int(cont))
             else:
-                dirlist_view = foldersize.get_dir_list(dirlist)
-
-            foldersize.print_listview(dirlist_view)
-            lastdisplayed = 'dl'
+                foldersize.create_dir_list()
+            foldersize.print_listview()
         elif cmd == 'filelistview' or cmd == 'fl':
-            if not dirlist:
-                raise Exception('Scan first')
-
             if cont == '-full' or cont == '-f':
-                dirlist_view = foldersize.get_file_list(dirlist, full=True)
+                foldersize.create_file_list(full=True)
             elif cont != '':
-                dirlist_view = foldersize.get_file_list(
-                    dirlist, number=int(cont))
+                foldersize.create_file_list(number=int(cont))
             else:
-                dirlist_view = foldersize.get_file_list(dirlist)
-
-            foldersize.print_listview(dirlist_view)
-            lastdisplayed = 'fl'
+                foldersize.create_file_list()
+            foldersize.print_listview()
         elif cmd == 'go' or cmd == 'g':
-            if not dirlist:
-                raise Exception('Scan first')
-
-            newdirlist = foldersize.movein_list(dirlist, int(cont))
-            dirlist_history.append(dirlist)
-            dirlist = newdirlist
-            foldersize.print_treeview(dirlist)
-            lastdisplayed = 't'
+            foldersize.movein_list(int(cont))
+            foldersize.print_treeview(level=2)
         elif cmd == 'back' or cmd == 'b':
-            if not dirlist:
-                raise Exception('Scan first')
-            if not dirlist_history:
-                raise Exception('Already at the top of the folder')
-
-            dirlist = dirlist_history.pop()
-            foldersize.print_treeview(dirlist)
-            lastdisplayed = 't'
+            foldersize.back_list()
+            foldersize.print_treeview(level=2)
         elif cmd == 'open' or cmd == 'o':
-            if not dirlist:
-                raise Exception('Scan first')
-
-            if lastdisplayed == 't':
-                path = foldersize.get_dir_tree_elem(dirlist, int(cont))
-                subprocess.run(f'explorer /select,{path}')
-                print(path + ' opened')
-            elif lastdisplayed == 'dl':
-                path = foldersize.get_dir_list_elem(dirlist_view, int(cont))
-                subprocess.run(f'explorer /select,{path}')
-                print(path + ' opened')
-            elif lastdisplayed == 'fl':
-                path = foldersize.get_file_list_elem(dirlist_view, int(cont))
-                subprocess.run(f'explorer /select,{path}')
-                print(path + ' opened')
+            path = foldersize.get_elem(int(cont))
+            subprocess.run(f'explorer /select,{path}')
+            print(path + ' opened')
         elif cmd == 'exit' or cmd == 'e':
             break
         else:
