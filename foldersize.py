@@ -7,7 +7,8 @@ from enum import Enum
 class FolderSize:
     def __init__(self, path):
         self.__path = path
-        self.__dirlist = []  # [((dir,size),[(file,size),(file,size)]),((dir,size),[(file,size)])]
+        # [((dir,size),[(file,size),(file,size)]),((dir,size),[(file,size)])]
+        self.__dirlist = []
         self.__dirlist_history = []
         self.__dirlist_view = []
         self.__lastprinted = ViewType
@@ -31,8 +32,10 @@ class FolderSize:
                 fullpath = direntry.path
 
                 if temppath != dirpath:
-                    templist_sorted = sorted(templist, key=lambda x: x[1], reverse=True)
-                    dirlist.append(((temppath, self.__calc_size(temppath, isfile=False)), templist_sorted))
+                    templist_sorted = sorted(
+                        templist, key=lambda x: x[1], reverse=True)
+                    dirlist.append(
+                        ((temppath, self.__calc_size(temppath, isfile=False)), templist_sorted))
                     temppath = dirpath
 
                 if direntry.is_file():
@@ -42,8 +45,10 @@ class FolderSize:
                     sublist += dirlist
                     dirlist = sublist
             else:
-                templist_sorted = sorted(templist, key=lambda x: x[1], reverse=True)
-                dirlist.append(((temppath, self.__calc_size(temppath, isfile=False)), templist_sorted))
+                templist_sorted = sorted(
+                    templist, key=lambda x: x[1], reverse=True)
+                dirlist.append(
+                    ((temppath, self.__calc_size(temppath, isfile=False)), templist_sorted))
         except:
             pass
 
@@ -218,6 +223,8 @@ class FolderSize:
                     if level <= reldepth <= level + 1:
                         collapsecnt += 1
                         continue
+                    elif reldepth > level + 1:
+                        continue
                     elif collapsecnt != 0:
                         print(f'{dirind * level}{symbol} ...{collapsecnt} folders collapsed')
                         collapsecnt = 0
@@ -292,7 +299,7 @@ def calc_depth(path):
 def len_adjust(string):
     if len_count(string) > 40:
         return string[0:17 - len_diff(string[0:17])] + '...' + \
-               string[-20 + len_diff(string[-20:]):]
+            string[-20 + len_diff(string[-20:]):]
     return string
 
 
