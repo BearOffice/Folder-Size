@@ -97,14 +97,14 @@ class FolderSize:
             raise Exception('Index overflowed')
 
         flist_selected = [flist_sorted[item] for item in range(0, number)]
-        self.__dirlist_view =  flist_selected
+        self.__dirlist_view = flist_selected
 
     def get_elem(self, index):
         self.__check_dirlist()
 
-        if self.__lastprinted == ViewType.TreeView:
+        if self.__lastprinted == ViewType.Tree:
             return self.__get_dir_tree_elem(index)
-        elif self.__lastprinted == ViewType.ListView:
+        elif self.__lastprinted == ViewType.DirList or self.__lastprinted == ViewType.FileList:
             return self.__get_list_elem(index)
 
     def __get_dir_tree_elem(self, index):
@@ -128,24 +128,32 @@ class FolderSize:
             raise Exception('Index overflowed')
         return self.__dirlist_view[index][0]
 
-    def movein_list(self, index):
+    def movein(self, index):
         self.__check_dirlist()
 
+        if self.__lastprinted == ViewType.Tree:
+            self.__tree_movein(index)
+        elif self.__lastprinted == ViewType.DirList:
+            self.__check_dirlist_view()
+            self.__list_movein(index)
+        elif self.__lastprinted == ViewType.FileList:
+            raise Exception('Only folders can be moved in')
+        else:
+            raise Exception('Print a treeview/listview first')
+
+    def __tree_movein(self, index):
         newdirlist = []
         indexcnt = -1
         isstarted = False
-        rootdir = self.__dirlist[0][0][0]
-        rootdepth = calc_depth(rootdir)
-
+        rootpath = self.__dirlist[0][0][0]
+        rootdepth = calc_depth(rootpath)
         for ditem in self.__dirlist:
             dirpath = ditem[0][0]
             dirdepth = calc_depth(dirpath)
             reldepth = dirdepth - rootdepth
-
             if reldepth == 1:
                 if isstarted:
-                    self.__dirlist_history.append(self.__dirlist)
-                    self.__dirlist = newdirlist
+                    break
                 else:
                     indexcnt += 1
             if index == indexcnt:
@@ -158,7 +166,28 @@ class FolderSize:
             self.__dirlist_history.append(self.__dirlist)
             self.__dirlist = newdirlist
 
-    def back_list(self):
+    def __list_movein(self, index):
+        newdirlist = []
+        rootpath = self.__dirlist_view[index][0]
+        rootdepth = calc_depth(rootpath)
+        isstarted = False
+        for ditem in self.__dirlist:
+            dirpath = ditem[0][0]
+            dirdepth = calc_depth(dirpath)
+            if isstarted and dirdepth <= rootdepth:
+                break
+            if dirpath == rootpath:
+                isstarted = True
+            if isstarted:
+                newdirlist.append(ditem)
+        # Check
+        if not newdirlist:
+            raise Exception('Index overflowed')
+        else:
+            self.__dirlist_history.append(self.__dirlist)
+            self.__dirlist = newdirlist
+
+    def back_action(self):
         self.__check_dirlist()
         self.__check_dirlist_history()
 
@@ -172,8 +201,8 @@ class FolderSize:
         symbol = '├──'
         indexcnt = -1
         collapsecnt = 0
-        rootdir = self.__dirlist[0][0][0]
-        rootdepth = calc_depth(rootdir)
+        rootpath = self.__dirlist[0][0][0]
+        rootdepth = calc_depth(rootpath)
         if level < 2:
             level = 2
 
@@ -186,7 +215,7 @@ class FolderSize:
 
             if i != 0:
                 if collapse:
-                    if reldepth >= level:
+                    if level <= reldepth <= level + 1:
                         collapsecnt += 1
                         continue
                     elif collapsecnt != 0:
@@ -195,13 +224,13 @@ class FolderSize:
 
                 if reldepth == 1:
                     indexcnt += 1
-                    dirname = f'{indexcnt}.{dirname}'
+                    dirname = f'[{indexcnt}]{dirname}'
 
-                dirname = f'[{len_adjust(dirname)}]'
+                dirname = f'{len_adjust(dirname)}{os.path.sep}'
 
                 print(f'{dirind * reldepth}{symbol} {dirname:<{44 - len_diff(dirname)}}{dirsize:>12}')
             else:  # print rootdir
-                dirname = f'[{len_adjust(dirpath)}]'
+                dirname = f'{len_adjust(dirpath)}{os.path.sep}'
                 print(f'{dirname:<{48 - len_diff(dirname)}}{dirsize:>12}')
 
             for j, fitem in enumerate(ditem[1]):
@@ -217,16 +246,21 @@ class FolderSize:
                 filesize = bytes_convert(fitem[1])
 
                 print(f'{fileind * (reldepth + 1)}{symbol} {filename:<{40 - len_diff(filename)}}{filesize:>12}')
+        else:
+            if collapse and collapsecnt != 0:
+                print(f'{dirind * level}{symbol} ...{collapsecnt} folders collapsed')
+        self.__lastprinted = ViewType.Tree
 
-        if collapse and collapsecnt != 0:
-            print(f'{dirind * level}{symbol} ...{collapsecnt} folders collapsed')
-        self.__lastprinted = ViewType.TreeView
-
-    def print_listview(self):
+    def print_listview(self, viewtype: 'ViewType'):
         self.__check_dirlist_view()
         [print(f'{i:>3}. {bytes_convert(item[1]):>10}  {item[0]}')
          for i, item in enumerate(self.__dirlist_view)]
-        self.__lastprinted = ViewType.ListView
+        if viewtype == ViewType.DirList:
+            self.__lastprinted = ViewType.DirList
+        elif viewtype == ViewType.FileList:
+            self.__lastprinted = ViewType.FileList
+        else:
+            raise Exception("viewtype's type must be ViewType")
 
     def __check_dirlist(self):
         if not self.__dirlist:
@@ -242,8 +276,9 @@ class FolderSize:
 
 
 class ViewType(Enum):
-    TreeView = 1
-    ListView = 2
+    Tree = 1
+    DirList = 2
+    FileList = 3
 
 
 def calc_depth(path):

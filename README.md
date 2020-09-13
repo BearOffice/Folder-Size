@@ -20,7 +20,7 @@
  &emsp;&emsp;&emsp;default value is 10  
  &emsp;&emsp;&emsp;use option -full(f) to print the full result  
  Enter go(g) [index] to move into the specified folders  
- &emsp;&emsp;&emsp;index relates to the treeview  
+ &emsp;&emsp;&emsp;Only folders can be moved in
  Enter back(b) to move back the parent folders  
  Enter open(o) [index] to open the folder or the file specified  
  &emsp;&emsp;&emsp;index relates to the last showed view  

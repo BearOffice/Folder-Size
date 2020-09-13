@@ -36,9 +36,9 @@ Enter filelistview(fl) [optional=number / -full(f)] to print the files\' paths d
            number can be specified to decide the number of paths you want to display
            default value is 10
            use option -full(f) to print the full result
-Enter go(g) [index] to move into the specified folders
+Enter go(g) [index] to move into the specified folder
            index relates to the treeview
-Enter back(b) to move back the parent folders
+Enter back(b) to return to the previous folder
 Enter open(o) [index] to open the folder or the file specified
            index relates to the last showed view
 Enter exit(e) to exit'''
@@ -90,7 +90,7 @@ while True:
                 foldersize.create_dir_list(number=int(cont))
             else:
                 foldersize.create_dir_list()
-            foldersize.print_listview()
+            foldersize.print_listview(fs.ViewType.DirList)
         elif cmd == 'filelistview' or cmd == 'fl':
             if cont == '-full' or cont == '-f':
                 foldersize.create_file_list(full=True)
@@ -98,12 +98,12 @@ while True:
                 foldersize.create_file_list(number=int(cont))
             else:
                 foldersize.create_file_list()
-            foldersize.print_listview()
+            foldersize.print_listview(fs.ViewType.FileList)
         elif cmd == 'go' or cmd == 'g':
-            foldersize.movein_list(int(cont))
+            foldersize.movein(int(cont))
             foldersize.print_treeview(level=2)
         elif cmd == 'back' or cmd == 'b':
-            foldersize.back_list()
+            foldersize.back_action()
             foldersize.print_treeview(level=2)
         elif cmd == 'open' or cmd == 'o':
             path = foldersize.get_elem(int(cont))
@@ -113,6 +113,8 @@ while True:
             break
         else:
             print('Do not have such a command')
+    except AttributeError:
+        print('Operation invaild: Scan first')
     except Exception as ex:
         print('Operation invaild:', ex)
 
