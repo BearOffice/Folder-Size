@@ -2,7 +2,7 @@
  A small script that can analyze the folder size quickly.  
  Help to find out the big files&folders to save disk storage.  
  
- Run run-win.py to open the script
+ Run run-xxx.py to open the script
 
 # Help
  Enter help(h) to get help message  
