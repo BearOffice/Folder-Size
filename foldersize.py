@@ -77,7 +77,7 @@ class FolderSize:
             raise Exception('Index overflowed')
 
         dlist_selected = [dlist_sorted[item] for item in range(0, number)]
-        return dlist_selected
+        self.__dirlist_view = dlist_selected
 
     def create_file_list(self, full=False, number=10):
         self.__check_dirlist()
@@ -97,7 +97,7 @@ class FolderSize:
             raise Exception('Index overflowed')
 
         flist_selected = [flist_sorted[item] for item in range(0, number)]
-        return flist_selected
+        self.__dirlist_view =  flist_selected
 
     def get_elem(self, index):
         self.__check_dirlist()
