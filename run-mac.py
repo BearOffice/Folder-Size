@@ -1,5 +1,3 @@
-import sys
-import ctypes
 import subprocess
 import foldersize as fs
 
@@ -87,7 +85,7 @@ while True:
             foldersize.print_treeview(level=2)
         elif cmd == 'open' or cmd == 'o':
             path = foldersize.get_elem(int(cont))
-            subprocess.run(["open", "-R", path])
+            subprocess.run(['open', '-R', path])
             print(path + ' opened')
         elif cmd == 'exit' or cmd == 'e':
             break
